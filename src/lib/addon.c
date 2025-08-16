@@ -62,6 +62,14 @@ napi_value uiohook_to_js_event(napi_env env, uiohook_event* event) {
     status = napi_create_uint32(env, event->data.keyboard.keycode, &e_keycode);
     NAPI_FATAL_IF_FAILED(status, "uiohook_to_js_event", "napi_create_uint32");
 
+    napi_value e_rawcode;
+    status = napi_create_uint32(env, event->data.keyboard.rawcode, &e_rawcode);
+    NAPI_FATAL_IF_FAILED(status, "uiohook_to_js_event", "napi_create_uint32");
+
+    napi_value e_keychar;
+    status = napi_create_uint32(env, event->data.keyboard.keychar, &e_keychar);
+    NAPI_FATAL_IF_FAILED(status, "uiohook_to_js_event", "napi_create_uint32");
+
     napi_property_descriptor descriptors[] = {
       { "type",     NULL, NULL, NULL, NULL, e_type,     napi_enumerable, NULL },
       { "time",     NULL, NULL, NULL, NULL, e_time,     napi_enumerable, NULL },
@@ -70,6 +78,8 @@ napi_value uiohook_to_js_event(napi_env env, uiohook_event* event) {
       { "metaKey",  NULL, NULL, NULL, NULL, e_metaKey,  napi_enumerable, NULL },
       { "shiftKey", NULL, NULL, NULL, NULL, e_shiftKey, napi_enumerable, NULL },
       { "keycode",  NULL, NULL, NULL, NULL, e_keycode,  napi_enumerable, NULL },
+      { "rawcode",  NULL, NULL, NULL, NULL, e_rawcode,  napi_enumerable, NULL },
+      { "keychar",  NULL, NULL, NULL, NULL, e_keychar,  napi_enumerable, NULL },
     };
     status = napi_define_properties(env, event_obj, sizeof(descriptors) / sizeof(descriptors[0]), descriptors);
     NAPI_FATAL_IF_FAILED(status, "uiohook_to_js_event", "napi_define_properties");
